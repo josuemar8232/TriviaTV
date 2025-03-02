@@ -87,9 +87,9 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="GOOGLE_KEY" value="AIzaSyAYwsAq9MRdEq2tHLdxzovhz2PWFYuwHek" />
+        <env name="GOOGLE_KEY" value="" />
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="ELEVEN_LABS_KEY" value="sk_854ece092391486ebbef06d34df60f6bd3ff969e2d70298f" />
+        <env name="ELEVEN_LABS_KEY" value="" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.13 (TriviaTV)" />
