@@ -1,8 +1,10 @@
+import os
 from typing import Iterator
 from pathlib import Path
 
-from elevenlabs import play, VoiceSettings
+from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
+from playsound import playsound
 
 
 class AudioController:
@@ -17,23 +19,31 @@ class AudioController:
     :ivar client: Instance of ElevenLabs client used for text-to-speech processing.
     :type client: ElevenLabs
     """
-    def generate_audio(self, input) -> Iterator[bytes]:
-        client = ElevenLabs()
+
+    def generate_audio(self, script) -> Iterator[bytes]:
+        if not script:
+            raise ValueError("script cannot be empty")
+
+        eleven_labs_key = os.environ.get("ELEVEN_LABS_KEY")
+        if not eleven_labs_key:
+            raise EnvironmentError("ELEVEN_LABS_KEY environment variable is not set")
+        client = ElevenLabs(
+            api_key=eleven_labs_key
+        )
 
         response = client.text_to_speech.convert_as_stream(
-            text=input,
+            text=script,
             voice_id="22VndfJPBU7AZORAZZTT",
             model_id="eleven_multilingual_v2",
             voice_settings=VoiceSettings(
                 speed=1.08,
-                stability=15,
-                similarity_boost=53,
-                style=80,
+                stability=0.15,
+                similarity_boost=0.53,
+                style=0.80,
                 use_speaker_boost=True
             )
         )
 
-        play(response)
         return response
 
     def save_audio_to_file(self, audio, file_name: str) -> None:

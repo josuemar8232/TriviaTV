@@ -1,11 +1,29 @@
-import os
-from google import genai
+from scr.audio.controller import AudioController
+from scr.script.controller import ScriptController
 
-client = genai.Client(api_key=os.environ["GOOGLE_KEY"])
 
-response = client.models.generate_content(
-    model="gemini-2.0-flash-lite",
-    contents="list of popular drinks in mexico in spanish",
-)
+def main():
+    """
+    Main function to generate script content and convert it into audio.
+    """
+    # Instantiate controllers
+    script_controller = ScriptController()
+    audio_controller = AudioController()
 
-print(response.text)
+    # Prompt for content generation
+    prompt = "Lista solo opciones sin comentarios, de 3 bebidas populares en México."
+    generated_text = script_controller.generate_content(prompt)
+
+    # Split the generated text into individual options
+    options = generated_text.split("\n")
+
+    # Remove asterisk (*) at the beginning of each option, strip whitespace, and filter out empty values
+    options_array = [option.lstrip("*").strip() for option in options if option.strip()]
+
+    # Generate audio from the content and Save the audio to a file
+    for option in options_array:
+        audio_stream = audio_controller.generate_audio(option)
+        audio_controller.save_audio_to_file(audio_stream, option)
+
+if __name__ == "__main__":
+    main()
